@@ -1,0 +1,31 @@
+/* Overall Styling */
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+/* Navbar Styling */
+nav {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+nav a {
+    color: #000000;
+}
+
+nav .navbar-back {
+    font-size: 1.8rem;
+}
+
+nav .brand-logo {
+    font-family: 'Quicksand', sans-serif;
+}
+
+nav .brand-logo.right {
+    color: #000000;
+    right: 1rem;
+}
+
+nav .nav-wrapper i {
+    display: contents;
+}
