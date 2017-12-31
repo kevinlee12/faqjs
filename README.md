@@ -23,3 +23,8 @@ parcel watch index.js
 - Elasticsearch Url (tbd - to be developed)
 - Install NodeJS
 - Run `yarn install` or `npm install` at root and `public/javascripts/`
+
+
+## Developer notes
+
+Please do not commit your `.env` file!
