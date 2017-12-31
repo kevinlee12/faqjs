@@ -17,6 +17,7 @@ class SearchPageApp extends Component {
       q: '',
       results: []
     };
+    this.search();
   }
   setQueryTextAndSearch(text) {
     this.setState({
