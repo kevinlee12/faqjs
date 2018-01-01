@@ -7,6 +7,7 @@ import Component from 'inferno-component';
 import Navbar from './navbar.js';
 import SearchBar from './searchBar.js'
 import Results from './result.js'
+import ModalContainer from './resultModal.js'
 
 const queryUrlPrefix = '/search';
 
@@ -33,6 +34,17 @@ class SearchPageApp extends Component {
       });
     }.bind(this));
   }
+  componentDidUpdate() {
+    // Open the appropriate modal if it is in the URL.
+    if (location.hash &&
+        location.hash !== '#!') {
+
+      let modalHref = location.hash;
+
+      $(modalHref).modal();
+      $(modalHref).modal('open');
+    }
+  }
   render() {
     return (
       <div>
@@ -41,6 +53,7 @@ class SearchPageApp extends Component {
           <SearchBar onChange={ this.setQueryTextAndSearch.bind(this) } />
           <Results results={ this.state.results } />
         </div>
+        <ModalContainer results={ this.state.results } />
       </div>
     )
   }

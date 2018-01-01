@@ -5,11 +5,27 @@ class ResultPreview extends Component {
   constructor(props) {
     super(props);
   }
+  openModal() {
+    let modalHref = '#m' + this.props.identifier;
+    $(modalHref).modal();
+    $(modalHref).modal('open');
+
+    // The following is adapted from
+    // https://stackoverflow.com/a/14690177
+    if (history.pushState) {
+      history.pushState(null, null, modalHref);
+    }
+    else {
+        location.hash = modalHref;
+    }
+  }
   render() {
+    let modalHref = '#m' + this.props.identifier;
     return (
       <div>
         <div class="section">
-          <h4> { this.props.question } </h4>
+          <a class="modal-trigger" onClick={ this.openModal.bind(this) }
+             href={ modalHref }><h4> { this.props.question } </h4></a>
           <div> { this.props.answer } </div>
         </div>
         <div class="divider"></div>
@@ -19,10 +35,10 @@ class ResultPreview extends Component {
 }
 
 ResultPreview.defaultProps = {
+  identifier: '',
   question: '',
   answer: ''
 };
-
 
 class Results extends Component {
   constructor(props) {
@@ -31,7 +47,8 @@ class Results extends Component {
   render() {
     var results = this.props.results.map(function(item, index) {
       return (
-        <ResultPreview question={ item.question } answer={ item.answer } />
+        <ResultPreview identifier={ item._id } question={ item.question }
+                       answer={ item.answer } />
       )
     });
     return (
