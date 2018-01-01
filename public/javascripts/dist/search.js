@@ -68,7 +68,7 @@ require = (function (modules, cache, entry) {
 
   // Override the current require with this new one
   return newRequire;
-})({5:[function(require,module,exports) {
+})({7:[function(require,module,exports) {
 /*! Hammer.JS - v2.0.7 - 2016-04-22
  * http://hammerjs.github.io/
  *
@@ -2713,7 +2713,7 @@ if (typeof define === 'function' && define.amd) {
 
 })(window, document, 'Hammer');
 
-},{}],12:[function(require,module,exports) {
+},{}],13:[function(require,module,exports) {
 
 // shim for using process in browser
 var process = module.exports = {};
@@ -2900,7 +2900,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],11:[function(require,module,exports) {
+},{}],12:[function(require,module,exports) {
 var global = (1,eval)("this");
 var process = require("process");
 /*!
@@ -13157,7 +13157,7 @@ if ( !noGlobal ) {
 return jQuery;
 } );
 
-},{"process":12}],6:[function(require,module,exports) {
+},{"process":13}],9:[function(require,module,exports) {
 /*!
  * Materialize v0.100.2 (http://materializecss.com)
  * Copyright 2014-2017 Materialize
@@ -23180,7 +23180,7 @@ if (Vel) {
   };
 })(jQuery);
 
-},{"jquery":11,"hammerjs":5}],9:[function(require,module,exports) {
+},{"jquery":12,"hammerjs":7}],11:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -25800,12 +25800,12 @@ exports.linkEvent = linkEvent;
 exports.options = options;
 exports.render = render;
 exports.version = version;
-},{}],7:[function(require,module,exports) {
+},{}],8:[function(require,module,exports) {
 module.exports = require('./dist').default;
 module.exports.default = module.exports;
 
 
-},{"./dist":9}],10:[function(require,module,exports) {
+},{"./dist":11}],10:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -26104,7 +26104,7 @@ Component.prototype._updateComponent = function _updateComponent(prevState, next
 Component.prototype.render = function render(nextProps, nextState, nextContext) {};
 
 exports['default'] = Component;
-},{"inferno":7}],8:[function(require,module,exports) {
+},{"inferno":8}],6:[function(require,module,exports) {
 module.exports = require('./dist').default;
 module.exports.default = module.exports;
 
@@ -26159,7 +26159,7 @@ var Navbar = function (_Component) {
 }(_infernoComponent2.default);
 
 module.exports = Navbar;
-},{"inferno":7,"inferno-component":8}],4:[function(require,module,exports) {
+},{"inferno":8,"inferno-component":6}],3:[function(require,module,exports) {
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -26225,7 +26225,7 @@ var SearchBar = function (_Component) {
 }(_infernoComponent2.default);
 
 module.exports = SearchBar;
-},{"inferno":7,"inferno-component":8}],3:[function(require,module,exports) {
+},{"inferno":8,"inferno-component":6}],4:[function(require,module,exports) {
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -26258,9 +26258,26 @@ var ResultPreview = function (_Component) {
   }
 
   _createClass(ResultPreview, [{
+    key: "openModal",
+    value: function openModal() {
+      var modalHref = '#m' + this.props.identifier;
+
+      // The following is adapted from
+      // https://stackoverflow.com/a/14690177
+      if (history.pushState) {
+        history.pushState(null, null, modalHref);
+      } else {
+        location.hash = modalHref;
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
-      return createVNode(2, "div", null, [createVNode(2, "div", "section", [createVNode(2, "h4", null, [" ", this.props.question, " "]), createVNode(2, "div", null, [" ", this.props.answer, " "])]), createVNode(2, "div", "divider")]);
+      var modalHref = '#m' + this.props.identifier;
+      return createVNode(2, "div", null, [createVNode(2, "div", "section", [createVNode(2, "a", "modal-trigger", createVNode(2, "h4", null, [" ", this.props.question, " "]), {
+        "onClick": this.openModal.bind(this),
+        "href": modalHref
+      }), createVNode(2, "div", null, [" ", this.props.answer, " "])]), createVNode(2, "div", "divider")]);
     }
   }]);
 
@@ -26268,6 +26285,7 @@ var ResultPreview = function (_Component) {
 }(_infernoComponent2.default);
 
 ResultPreview.defaultProps = {
+  identifier: '',
   question: '',
   answer: ''
 };
@@ -26286,6 +26304,7 @@ var Results = function (_Component2) {
     value: function render() {
       var results = this.props.results.map(function (item, index) {
         return createVNode(16, ResultPreview, null, null, {
+          "identifier": item._id,
           "question": item.question,
           "answer": item.answer
         });
@@ -26302,7 +26321,91 @@ Results.defaultProps = {
 };
 
 module.exports = Results;
-},{"inferno":7,"inferno-component":8}],1:[function(require,module,exports) {
+},{"inferno":8,"inferno-component":6}],5:[function(require,module,exports) {
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _inferno = require("inferno");
+
+var _inferno2 = _interopRequireDefault(_inferno);
+
+var _infernoComponent = require("inferno-component");
+
+var _infernoComponent2 = _interopRequireDefault(_infernoComponent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var createVNode = _inferno2.default.createVNode;
+
+var ResultModal = function (_Component) {
+  _inherits(ResultModal, _Component);
+
+  function ResultModal(props) {
+    _classCallCheck(this, ResultModal);
+
+    return _possibleConstructorReturn(this, (ResultModal.__proto__ || Object.getPrototypeOf(ResultModal)).call(this, props));
+  }
+
+  _createClass(ResultModal, [{
+    key: "render",
+    value: function render() {
+      var modalHref = 'm' + this.props.identifier;
+      return createVNode(2, "div", "modal modal-fixed-footer", [createVNode(2, "div", "modal-content", [createVNode(2, "h4", null, [" ", this.props.question, " "]), createVNode(2, "div", null, [" ", this.props.answer, " "])]), createVNode(2, "div", "modal-footer", createVNode(2, "a", "modal-action modal-close waves-effect waves-green btn-flat", "Close", {
+        "href": "#!"
+      }))], {
+        "id": modalHref
+      });
+    }
+  }]);
+
+  return ResultModal;
+}(_infernoComponent2.default);
+
+ResultModal.defaultProps = {
+  identifier: '',
+  question: '',
+  answer: ''
+};
+
+var ModalContainer = function (_Component2) {
+  _inherits(ModalContainer, _Component2);
+
+  function ModalContainer(props) {
+    _classCallCheck(this, ModalContainer);
+
+    return _possibleConstructorReturn(this, (ModalContainer.__proto__ || Object.getPrototypeOf(ModalContainer)).call(this, props));
+  }
+
+  _createClass(ModalContainer, [{
+    key: "render",
+    value: function render() {
+      var resultModals = this.props.results.map(function (item, index) {
+        return createVNode(16, ResultModal, null, null, {
+          "identifier": item._id,
+          "question": item.question,
+          "answer": item.answer
+        });
+      });
+      return createVNode(2, "div", null, resultModals);
+    }
+  }]);
+
+  return ModalContainer;
+}(_infernoComponent2.default);
+
+ModalContainer.defaultProps = {
+  results: []
+};
+
+module.exports = ModalContainer;
+},{"inferno":8,"inferno-component":6}],1:[function(require,module,exports) {
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -26331,6 +26434,10 @@ var _result = require("./result.js");
 
 var _result2 = _interopRequireDefault(_result);
 
+var _resultModal = require("./resultModal.js");
+
+var _resultModal2 = _interopRequireDefault(_resultModal);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -26355,6 +26462,7 @@ var SearchPageApp = function (_Component) {
       q: '',
       results: []
     };
+    _this.search();
     return _this;
   }
 
@@ -26377,6 +26485,23 @@ var SearchPageApp = function (_Component) {
       }.bind(this));
     }
   }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate() {
+      $('.modal').modal({
+        complete: function complete() {
+          location.hash = '#!';
+        }
+      });
+      // Open the appropriate modal if it is in the URL.
+      if (location.hash && location.hash !== '#!') {
+
+        var modalHref = location.hash;
+
+        $(modalHref).modal();
+        $(modalHref).modal('open');
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       return createVNode(2, "div", null, [createVNode(16, _navbar2.default), createVNode(2, "div", "container", [createVNode(16, _searchBar2.default, null, null, {
@@ -26385,6 +26510,8 @@ var SearchPageApp = function (_Component) {
         "results": this.state.results
       })], {
         "style": "margin-top: 10px;"
+      }), createVNode(16, _resultModal2.default, null, null, {
+        "results": this.state.results
       })]);
     }
   }]);
@@ -26393,7 +26520,7 @@ var SearchPageApp = function (_Component) {
 }(_infernoComponent2.default);
 
 _inferno2.default.render(createVNode(16, SearchPageApp), document.getElementById('app'));
-},{"hammerjs":5,"materialize-css":6,"inferno":7,"inferno-component":8,"./navbar.js":2,"./searchBar.js":4,"./result.js":3}],0:[function(require,module,exports) {
+},{"hammerjs":7,"materialize-css":9,"inferno":8,"inferno-component":6,"./navbar.js":2,"./searchBar.js":3,"./result.js":4,"./resultModal.js":5}],0:[function(require,module,exports) {
 var global = (1, eval)('this');
 var OldModule = module.bundle.Module;
 function Module() {
@@ -26411,7 +26538,7 @@ function Module() {
 module.bundle.Module = Module;
 
 if (!module.bundle.parent && typeof WebSocket !== 'undefined') {
-  var ws = new WebSocket('ws://localhost:36505/');
+  var ws = new WebSocket('ws://localhost:33711/');
   ws.onmessage = function(event) {
     var data = JSON.parse(event.data);
 

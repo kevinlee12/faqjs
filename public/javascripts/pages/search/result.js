@@ -7,16 +7,13 @@ class ResultPreview extends Component {
   }
   openModal() {
     let modalHref = '#m' + this.props.identifier;
-    $(modalHref).modal();
-    $(modalHref).modal('open');
 
     // The following is adapted from
     // https://stackoverflow.com/a/14690177
     if (history.pushState) {
       history.pushState(null, null, modalHref);
-    }
-    else {
-        location.hash = modalHref;
+    } else {
+      location.hash = modalHref;
     }
   }
   render() {

@@ -35,6 +35,11 @@ class SearchPageApp extends Component {
     }.bind(this));
   }
   componentDidUpdate() {
+    $('.modal').modal({
+      complete: function() {
+        location.hash = '#!';
+      }
+    });
     // Open the appropriate modal if it is in the URL.
     if (location.hash &&
         location.hash !== '#!') {

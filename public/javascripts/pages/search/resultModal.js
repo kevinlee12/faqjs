@@ -5,9 +5,6 @@ class ResultModal extends Component {
   constructor(props) {
     super(props);
   }
-  componentDidUpdate() {
-    $('#m' + this.props.identifier).modal();
-  }
   render() {
     let modalHref = 'm' + this.props.identifier;
     return (
