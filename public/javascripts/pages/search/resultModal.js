@@ -28,7 +28,7 @@ ResultModal.defaultProps = {
 };
 
 
-class ModalContainer extends Component {
+class ModalContainer extends Inferno.Component {
   constructor(props) {
     super(props);
   }

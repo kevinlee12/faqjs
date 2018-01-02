@@ -13,19 +13,40 @@ nav a {
     color: #000000;
 }
 
+nav ul a {
+    color: #000000;
+}
+
 nav .navbar-back {
     font-size: 1.8rem;
 }
 
 nav .brand-logo {
+    color: #000000;
     font-family: 'Quicksand', sans-serif;
 }
 
 nav .brand-logo.right {
-    color: #000000;
     right: 1rem;
+}
+
+nav .brand-logo.left {
+    left: 1rem;
 }
 
 nav .nav-wrapper i {
     display: contents;
+}
+
+
+.admin-header {
+    font-family: 'Quicksand', sans-serif;
+}
+
+th {
+    min-width: 100px;
+}
+
+td {
+    min-width: 100px;
 }
