@@ -3,9 +3,46 @@ let router = express.Router();
 
 let ObjectId = require('mongodb').ObjectID;
 
+let checkPermissions = function(req, res, successCallback, errorCallback) {
+  const db = req.app.locals.db;
+  db.collection('users').findOne(
+    { googleId: req.user.googleId },
+    function(err, user) {
+      if (err) errorCallback(err);
 
-router.get('/', function(req, res, next) {
-  res.render('admin');
+      if ((user !== null) && user.approved) {
+        if (successCallback) {
+          successCallback(user);
+        }
+      } else {
+        if (errorCallback) {
+          errorCallback();
+        }
+      }
+    }
+  );
+};
+
+router.get('/manage/threads', function(req, res, next) {
+  let successCallback = function() {
+    return res.render('admin');
+  }
+
+  let errorCallback = function() {
+    return res.sendStatus(403);
+  }
+  checkPermissions(req, res, successCallback, errorCallback);
+});
+
+router.get('/manage/users', function(req, res, next) {
+  let successCallback = function() {
+    return res.render('admin');
+  }
+
+  let errorCallback = function() {
+    return res.sendStatus(403);
+  }
+  checkPermissions(req, res, successCallback, errorCallback);
 });
 
 let checkSecureProtocol = function(req, res, next) {
@@ -15,7 +52,9 @@ let checkSecureProtocol = function(req, res, next) {
   next();
 };
 
-router.post('/thread', function(req, res, next) {
+// Thread Management
+// Update a thread
+router.post('/thread/update', function(req, res, next) {
   // checkSecureProtocol(req, res, next);
   // Enforce JSON request.
   if (req.get('Content-Type') !== 'application/json; charset=utf-8') {
@@ -36,6 +75,7 @@ router.post('/thread', function(req, res, next) {
     });
 });
 
+// Create a thread
 router.post('/thread/create', function(req, res, next) {
   // checkSecureProtocol(req, res, next);
   // Enforce JSON request.
@@ -56,6 +96,7 @@ router.post('/thread/create', function(req, res, next) {
     });
 });
 
+// Delete a thread
 router.post('/thread/delete', function(req, res, next) {
   // checkSecureProtocol(req, res, next);
 
@@ -71,5 +112,19 @@ router.post('/thread/delete', function(req, res, next) {
     }
   );
 })
+
+
+// User management
+
+router.get('/users', function(req, res, next) {
+  const userCollection = db.collection('users');
+
+  userCollection.find({}).toArray(function(err, docs) {
+    if (err) throw err;
+
+    res.send(docs);
+  });
+});
+
 
 module.exports = router;
