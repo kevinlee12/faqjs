@@ -8,12 +8,13 @@ class Navbar extends Component {
   render() {
     return (
       <div class="navbar-fixed">
-        <nav>
+        <nav class="nav-extended">
           <div class="nav-wrapper">
             <div class="brand-logo left">FAQ</div>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-              <li><a href="#">Users</a></li>
-              <li><a href="#">Threads</a></li>
+            <ul class="right">
+              <li><a href="/admin/manage/users">Users</a></li>
+              <li><a href="/admin/manage/threads">Thread</a></li>
+              <li><a href="/logout" class="waves-effect waves-light btn blue-grey darken-2" >Logout</a></li>
             </ul>
           </div>
         </nav>

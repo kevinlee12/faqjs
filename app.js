@@ -26,7 +26,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: 'keyboard cat' }));
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false
+}));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -53,18 +58,18 @@ passport.use(new GoogleStrategy({
     callbackURL: '/auth/google/callback'
   }, function(accessToken, refreshToken, profile, done) {
     const db = app.locals.db;
+
+    // The following updates the user's info provided that they have
+    // the email that is the same as it is in the db.
     db.collection('users').findAndModify(
-      { googleId: profile.id },
+      { email: profile.emails[0].value },
       [[ 'googleId', 1 ]],
-      {
-        $setOnInsert: {
-          googleId: profile.id,
-          displayName: profile.displayName,
-          email: profile.emails[0].value, // Grab only the first email
-          approved: true
+      { $set: {
+        googleId: profile.id,
+        displayName: profile.displayName,
+        email: profile.emails[0].value, // Grab only the first email
         }
-      },
-      {
+      }, {
         new: true,
         upsert: true
       },
@@ -76,7 +81,9 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.serializeUser(function(user, done) {
-  return done(null, user.googleId);
+  if (user.googleId) {
+    return done(null, user.googleId);
+  };
 });
 
 passport.deserializeUser(function(id, done) {

@@ -6,6 +6,7 @@
   "dependencies": {
     "inferno": "^3.10.1",
     "inferno-component": "^3.10.1",
+    "inferno-router": "^3.10.1",
     "materialize-css": "^0.100.2"
   },
   "devDependencies": {

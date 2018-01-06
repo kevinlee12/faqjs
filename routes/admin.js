@@ -5,6 +5,10 @@ let ObjectId = require('mongodb').ObjectID;
 
 let checkPermissions = function(req, res, successCallback, errorCallback) {
   const db = req.app.locals.db;
+
+  if (req.user === null || req.user === undefined) {
+    return res.redirect('/auth/google');
+  }
   db.collection('users').findOne(
     { googleId: req.user.googleId },
     function(err, user) {
@@ -113,18 +117,79 @@ router.post('/thread/delete', function(req, res, next) {
   );
 })
 
-
 // User management
 
 router.get('/users', function(req, res, next) {
+  const db = req.app.locals.db;
   const userCollection = db.collection('users');
 
-  userCollection.find({}).toArray(function(err, docs) {
+  return userCollection.find({}).toArray(function(err, docs) {
     if (err) throw err;
 
     res.send(docs);
   });
 });
 
+// Update a user
+router.post('/user/update', function(req, res, next) {
+  // checkSecureProtocol(req, res, next);
+  // Enforce JSON request.
+  if (req.get('Content-Type') !== 'application/json; charset=utf-8') {
+    return res.sendStatus(403);
+  }
+  const db = req.app.locals.db;
+  const userCollection = db.collection('users');
+
+  userCollection.updateOne(
+    { _id: ObjectId(req.body._id) },
+    { $set: {
+      displayName: req.body.displayName,
+      email: req.body.email,
+      approved: req.body.approved
+     }
+    }, function(err, result) {
+      if (err) throw err;
+      res.send(req.body);
+    });
+});
+
+// Create a thread
+router.post('/user/create', function(req, res, next) {
+  // checkSecureProtocol(req, res, next);
+  // Enforce JSON request.
+  if (req.get('Content-Type') !== 'application/json; charset=utf-8') {
+    return res.sendStatus(403);
+  }
+  const db = req.app.locals.db;
+  const userCollection = db.collection('users');
+
+  userCollection.insertOne(
+    {
+      displayName: req.body.displayName,
+      email: req.body.email,
+      approved: req.body.approved
+    }, function(err, result) {
+      if (err) throw err;
+
+      res.send(result.ops);
+    });
+});
+
+// Delete a thread
+router.post('/user/delete', function(req, res, next) {
+  // checkSecureProtocol(req, res, next);
+
+  const db = req.app.locals.db;
+  const userCollection = db.collection('users');
+
+  userCollection.deleteOne(
+    { _id: ObjectId(req.body._id) },
+    function(err, result) {
+      if (err) throw err;
+
+      res.send({ status: result.result.n });
+    }
+  );
+})
 
 module.exports = router;

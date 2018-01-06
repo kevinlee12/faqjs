@@ -5,8 +5,8 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 
 import Navbar from './navbar';
-import ThreadAdmin from './threadAdmin';
-import UserAdmin from './userAdmin';
+
+import routes from './adminRouter'
 
 class AdminPageApp extends Component {
   constructor(props) {
@@ -16,15 +16,11 @@ class AdminPageApp extends Component {
     };
   }
   render() {
-    let adminContent = <ThreadAdmin />;
-    if (this.state.currentTab === 'users') {
-      <UsersAdmin />
-    }
     return (
       <div>
         <Navbar />
-        <div class="container" style="margin-top: 10px;">
-        { adminContent }
+        <div class="container">
+          { routes }
         </div>
       </div>
     )

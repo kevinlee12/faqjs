@@ -1,7 +1,7 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
-const threadEditUrl = '/admin/thread';
+const threadEditUrl = '/admin/thread/update';
 const threadCreateUrl = '/admin/thread/create';
 const threadDeleteUrl = '/admin/thread/delete';
 
@@ -14,7 +14,7 @@ class ThreadModal extends Component {
       answer: this.props.answer
     };
   }
-  sendEdits() {
+  updateThread() {
     let params = {
       _id: this.state.identifier,
       question: this.state.question,
@@ -28,7 +28,7 @@ class ThreadModal extends Component {
       contentType: 'application/json; charset=utf-8',
       dataType: 'json',
       success: function() {
-        that.props.onChange(params);
+        that.props.onUpdate(params);
       }
     });
   }
@@ -125,7 +125,7 @@ class ThreadModal extends Component {
           </button>
           { this.props.onUpdate ?
             <button class="modal-action modal-close waves-effect waves-green btn-flat green lighten-5"
-                    onClick={ this.sendEdits.bind(this) }>
+                    onClick={ this.updateThread.bind(this) }>
               Save Changes
             </button>
             : null }
