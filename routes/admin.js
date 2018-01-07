@@ -49,12 +49,59 @@ router.get('/manage/users', function(req, res, next) {
   checkPermissions(req, res, successCallback, errorCallback);
 });
 
+router.get('/manage/elastic', function(req, res, next) {
+  let successCallback = function() {
+    return res.render('admin');
+  }
+
+  let errorCallback = function() {
+    return res.sendStatus(403);
+  }
+  checkPermissions(req, res, successCallback, errorCallback);
+});
+
 let checkSecureProtocol = function(req, res, next) {
   if (!req.secure) {
     return res.sendStatus(403);
   }
   next();
 };
+
+const createOrUpdateThreadElastic = function(req, res, obj, next) {
+  const esClient = req.app.locals.esClient;
+
+  esClient.index({
+    index: 'faq',
+    type: 'faq',
+    id: obj._id,
+    body: {
+      question: obj.question,
+      answer: obj.answer
+    }
+  }, function(err, response) {
+    if (err) throw err;
+
+    if (next) {
+      next(obj);
+    }
+  });
+}
+
+const deleteThreadElastic = function(req, res, obj, next) {
+  const esClient = req.app.locals.esClient;
+
+  esClient.delete({
+    index: 'faq',
+    type: 'faq',
+    id: obj._id,
+  }, function(err, response) {
+    if (err) throw err;
+
+    if (next) {
+      next(obj);
+    }
+  });
+}
 
 // Thread Management
 // Update a thread
@@ -75,6 +122,8 @@ router.post('/thread/update', function(req, res, next) {
      }
     }, function(err, result) {
       if (err) throw err;
+
+      createOrUpdateThreadElastic(req, res, req.body);
       res.send(req.body);
     });
 });
@@ -96,6 +145,7 @@ router.post('/thread/create', function(req, res, next) {
     }, function(err, result) {
       if (err) throw err;
 
+      createOrUpdateThreadElastic(req, res, req.body);
       res.send(result.ops);
     });
 });
@@ -112,6 +162,7 @@ router.post('/thread/delete', function(req, res, next) {
     function(err, result) {
       if (err) throw err;
 
+      deleteThreadElastic(req, res, req.body);
       res.send({ status: result.result.n });
     }
   );
@@ -191,5 +242,12 @@ router.post('/user/delete', function(req, res, next) {
     }
   );
 })
+
+// Elastic Management
+router.get('/elastic/create_index', function(req, res, next) {
+  const esClient = req.app.locals.esClient;
+
+  esClient.indices.create({index: 'faq'});
+});
 
 module.exports = router;
