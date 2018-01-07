@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
+const elasticsearch = require('elasticsearch');
 
 const index = require('./routes/index');
 const searchEngine = require('./routes/search');
@@ -47,7 +48,25 @@ MongoClient.connect(process.env.MONGODB_URL, function (err, client) {
 
   app.locals.db = client.db('faqjs');
   console.log('Connected to MongoDB');
-})
+});
+
+// Elasticsearch
+let esClient = new elasticsearch.Client({
+  host: process.env.ELASTICSEARCH_URL,
+  log: 'trace'
+});
+
+esClient.ping({
+  requestTimeout: 30000,
+}, function (error) {
+  if (error) {
+    console.error('elasticsearch cluster is down!');
+  } else {
+    console.log('All is well');
+  }
+});
+
+app.locals.esClient = esClient;
 
 // Google login
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;

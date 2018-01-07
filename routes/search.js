@@ -1,6 +1,8 @@
 let express = require('express');
 let router = express.Router();
 
+let esBuilder = require('elastic-builder');
+
 // The following is adapted from
 // https://github.com/mongodb/node-mongodb-native/#find-all-documents
 const sendAllDocuments = function(db, req, res) {
@@ -17,7 +19,7 @@ const sendAllDocuments = function(db, req, res) {
 
 // The following is adapted from
 // https://github.com/mongodb/node-mongodb-native/#find-all-documents
-const findAndSendDocuments = function(db, req, res, query) {
+const findAndSendDocumentsDB = function(db, req, res, query) {
   // Get the documents collection
   const collection = db.collection('threads');
   // Find some documents
@@ -31,12 +33,46 @@ const findAndSendDocuments = function(db, req, res, query) {
   );
 };
 
+const findAndSendDocumentsElastic = function(req, res, query, next) {
+  const esClient = req.app.locals.esClient;
+
+  const queryBody = new esBuilder.MultiMatchQuery(
+      ['question', 'answer'], query)
+    .fuzziness('AUTO');
+
+  const requestBody = new esBuilder.RequestBodySearch()
+    .query(queryBody);
+
+  esClient.search({
+    index: 'faq',
+    body: requestBody.toJSON()
+  }, function(err, result) {
+    if (err) throw err;
+
+    if (next) next(result);
+  })
+};
+
 router.get('/', function(req, res, next) {
   let results = [];
   const db = req.app.locals.db;
 
+  let sendResults = function(results) {
+    const resultObjects = results.hits.hits;
+    let sendResults = resultObjects.map(function(result) {
+      return {
+        _id: result._id,
+        question: result._source.question,
+        answer: result._source.answer
+      };
+    });
+
+    return res.send(sendResults);
+  }
+
   if (req.query.q) {
-    findAndSendDocuments(db, req, res, req.query.q);
+    findAndSendDocumentsElastic(req, res, req.query.q, sendResults);
+    // findAndSendDocuments(db, req, res, req.query.q);
   } else {
     sendAllDocuments(db, req, res);
   }
