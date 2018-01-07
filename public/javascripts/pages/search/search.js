@@ -20,11 +20,10 @@ class SearchPageApp extends Component {
     };
     this.search();
   }
-  setQueryTextAndSearch(text) {
+  setQueryText(text) {
     this.setState({
       q: text
     });
-    this.search();
   }
   search() {
     var queryUrl = queryUrlPrefix + '?q=' + this.state.q;
@@ -55,7 +54,8 @@ class SearchPageApp extends Component {
       <div>
         <Navbar />
         <div class="container" style="margin-top: 10px;">
-          <SearchBar onChange={ this.setQueryTextAndSearch.bind(this) } />
+          <SearchBar onChange={ this.setQueryText.bind(this) }
+                     onSearchBtnClick={ this.search.bind(this) } />
           <Results results={ this.state.results } />
         </div>
         <ModalContainer results={ this.state.results } />
