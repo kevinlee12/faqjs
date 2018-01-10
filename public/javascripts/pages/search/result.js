@@ -1,6 +1,16 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
+const PREVIEW_LENGTH = 250;
+
+// Given a text, shortens the preview to a specified length.
+function shortenPreviewText(text) {
+  if (text.length < PREVIEW_LENGTH) {
+    return text;
+  }
+  return text.substring(0, PREVIEW_LENGTH) + '...';
+};
+
 class ResultPreview extends Component {
   constructor(props) {
     super(props);
@@ -16,14 +26,23 @@ class ResultPreview extends Component {
       location.hash = modalHref;
     }
   }
+  answerPreviewRender() {
+    return (
+      <div>
+        { shortenPreviewText(this.props.answer) }
+      </div>
+    );
+  }
   render() {
     let modalHref = '#m' + this.props.identifier;
     return (
       <div>
         <div class="section">
           <a class="modal-trigger" onClick={ this.openModal.bind(this) }
-             href={ modalHref }><h4> { this.props.question } </h4></a>
-          <div> { this.props.answer } </div>
+             href={ modalHref }>
+            <h4> { this.props.question } </h4>
+          </a>
+          <div> { this.answerPreviewRender() } </div>
         </div>
         <div class="divider"></div>
       </div>
