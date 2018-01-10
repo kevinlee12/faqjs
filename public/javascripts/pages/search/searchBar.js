@@ -1,4 +1,4 @@
-import Inferno from 'inferno';
+import Inferno, { linkEvent } from 'inferno';
 import Component from 'inferno-component';
 
 class SearchBar extends Component {
@@ -8,26 +8,25 @@ class SearchBar extends Component {
       q: ''
     };
   }
-  handleChange(event) {
-    this.setState({
+  handleChange(instance, event) {
+    instance.setState({
       q: event.target.value
     });
 
-    if (this.props.onChange) {
-      this.props.onChange(event.target.value);
+    if (instance.props.onChange) {
+      instance.props.onChange(event.target.value);
     }
   }
-  handleSearch() {
-    if (this.props.onSearchBtnClick) {
-      this.props.onSearchBtnClick();
+  handleSearch(instance) {
+    if (instance.props.onSearchBtnClick) {
+      instance.props.onSearchBtnClick();
     }
   }
   componentDidUpdate() {
     $('input').on('keypress', function(e) {
       var key = e.which;
-      console.log(key);
       if (key === 13) {
-        this.handleSearch();
+        this.handleSearch(this);
       }
     }.bind(this));
   }
@@ -37,13 +36,13 @@ class SearchBar extends Component {
         <div class="input-field col s10">
           <input id="icon_prefix" type="text"
                  class="validate" value={ this.state.q }
-                 onInput={ this.handleChange.bind(this) } />
+                 onInput={ linkEvent(this, this.handleChange) } />
           <label for="icon_prefix">How can we help you?</label>
         </div>
         <div class="col s2">
           <button class="btn waves-effect waves-light"
                   style="margin-top:20px;width:70%"
-                  onClick={ this.handleSearch.bind(this) }>
+                  onClick={ linkEvent(this, this.handleSearch) }>
             <i class="material-icons">search</i>
           </button>
         </div>

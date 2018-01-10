@@ -1,4 +1,4 @@
-import Inferno from 'inferno';
+import Inferno, { linkEvent } from 'inferno';
 import Component from 'inferno-component';
 
 const PREVIEW_LENGTH = 250;
@@ -15,8 +15,8 @@ class ResultPreview extends Component {
   constructor(props) {
     super(props);
   }
-  openModal() {
-    let modalHref = '#m' + this.props.identifier;
+  openModal(instance) {
+    let modalHref = '#m' + instance.props.identifier;
 
     // The following is adapted from
     // https://stackoverflow.com/a/14690177
@@ -38,7 +38,7 @@ class ResultPreview extends Component {
     return (
       <div>
         <div class="section">
-          <a class="modal-trigger" onClick={ this.openModal.bind(this) }
+          <a class="modal-trigger" onClick={ linkEvent(this, ResultPreview.openModal) }
              href={ modalHref }>
             <h4> { this.props.question } </h4>
           </a>
