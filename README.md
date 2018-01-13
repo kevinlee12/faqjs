@@ -8,10 +8,10 @@ At the root:
 DEBUG=faqjs:* yarn start
 ```
 
-In `public/javascripts`
+For frontend items
 
 ```bash
-parcel watch index.js
+parcel watch public/javascripts/<file_name>.js
 ```
 
 ## Getting started checklist
