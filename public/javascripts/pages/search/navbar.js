@@ -13,7 +13,7 @@ class Navbar extends Component {
         <nav>
           <div class="nav-wrapper">
             { this.getReferrerUrl() ?
-              <a href={ this.getReferrerUrl() } class="navbar-back waves-effect waves-light btn">
+              <a href={ this.getReferrerUrl() } class="navbar-back waves-effect waves-light btn-flat">
                 <i class="material-icons left">arrow_back</i> Back
               </a>
               : null
