@@ -3,3 +3,5 @@ parser: babel-eslint
 env:
   browser: true
   jquery: true
+globals:
+  module: false
