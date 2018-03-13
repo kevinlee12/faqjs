@@ -1,24 +1,25 @@
 import 'hammerjs';
 import 'materialize-css';
 
-import Inferno from 'inferno';
-import { Router, Route } from 'inferno-router';
+import { BrowserRouter, Route } from 'inferno-router';
 import createBrowserHistory from 'history/createBrowserHistory';
 
-import ThreadAdmin from './threadAdmin';
 import UserAdmin from './userAdmin';
+import ThreadAdmin from './threadAdmin';
 import ElasticAdmin from './elasticAdmin';
 
 const browserHistory = createBrowserHistory();
 
 const routes = (
-  <Router history={ browserHistory }>
+  <BrowserRouter history={ browserHistory }>
     <Route>
-      <Route path="/admin/manage/users" component={ UserAdmin } />
-      <Route path="/admin/manage/threads" component={ ThreadAdmin } />
-      <Route path="/admin/manage/elastic" component={ ElasticAdmin } />
+      <div>
+        <Route path="/admin/manage/users" component={ UserAdmin } />
+        <Route path="/admin/manage/threads" component={ ThreadAdmin } />
+        <Route path="/admin/manage/elastic" component={ ElasticAdmin } />
+      </div>
     </Route>
-  </Router>
+  </BrowserRouter>
 );
 
 export default routes;

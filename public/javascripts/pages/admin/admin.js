@@ -1,8 +1,7 @@
 import 'hammerjs';
 import 'materialize-css';
 
-import Inferno from 'inferno';
-import Component from 'inferno-component';
+import { Component, render } from 'inferno';
 
 import Navbar from './navbar';
 
@@ -27,4 +26,4 @@ class AdminPageApp extends Component {
   }
 }
 
-Inferno.render(<AdminPageApp />, document.getElementById('app'));
+render(<AdminPageApp />, document.getElementById('app'));

@@ -1,5 +1,4 @@
-import Inferno from 'inferno';
-import Component from 'inferno-component';
+import { Component } from 'inferno';
 
 const userEditUrl = '/admin/user/update';
 const userCreateUrl = '/admin/user/create';
@@ -179,10 +178,11 @@ class UserModalContainer extends Component {
     let that = this;
     let resultModals = this.props.users.map(function(item, index) {
       return (
-        <UserModal identifier={ item._id } displayName={ item.displayName }
-                     email={ item.email } approved={ item.approved }
-                     onUpdate={ that.props.updateUserCallback }
-                     onDelete={ that.props.deleteUserCallback } />
+        <UserModal key={ item._id } identifier={ item._id }
+                   displayName={ item.displayName }
+                   email={ item.email } approved={ item.approved }
+                   onUpdate={ that.props.updateUserCallback }
+                   onDelete={ that.props.deleteUserCallback } />
       )
     });
     return (

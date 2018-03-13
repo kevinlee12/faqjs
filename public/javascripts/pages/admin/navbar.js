@@ -1,5 +1,4 @@
-import Inferno from 'inferno';
-import Component from 'inferno-component';
+import { Component } from 'inferno';
 
 const links = [
   { url: '/admin/manage/threads', name: 'Thread'},
@@ -12,9 +11,9 @@ class Navbar extends Component {
     super(props);
   }
   render() {
-    var navLinks = links.map(function(item) {
+    var navLinks = links.map(function(item, index) {
       return (
-        <li class={ window.location.pathname === item.url ? 'active' : null }>
+        <li key={ index } class={ window.location.pathname === item.url ? 'active' : null }>
           <a href={ item.url }> { item.name } </a>
         </li>
       );

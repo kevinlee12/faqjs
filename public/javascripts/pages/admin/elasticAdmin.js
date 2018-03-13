@@ -1,5 +1,4 @@
-import Inferno from 'inferno';
-import Component from 'inferno-component';
+import { Component } from 'inferno';
 
 const createIndexUrlPrefix = '/admin/elastic/create_index';
 
@@ -20,6 +19,6 @@ class ThreadAdmin extends Component {
       </div>
     )
   }
-};
+}
 
 module.exports = ThreadAdmin;

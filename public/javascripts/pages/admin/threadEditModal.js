@@ -1,5 +1,4 @@
-import Inferno from 'inferno';
-import Component from 'inferno-component';
+import { Component } from 'inferno';
 
 const threadEditUrl = '/admin/thread/update';
 const threadCreateUrl = '/admin/thread/create';
@@ -161,7 +160,8 @@ class ThreadModalContainer extends Component {
     let that = this;
     let resultModals = this.props.threads.map(function(item, index) {
       return (
-        <ThreadModal identifier={ item._id } question={ item.question }
+        <ThreadModal key={ item._id} identifier={ item._id }
+                     question={ item.question }
                      answer={ item.answer }
                      onUpdate={ that.props.updateThreadCallback }
                      onDelete={ that.props.deleteThreadCallback } />

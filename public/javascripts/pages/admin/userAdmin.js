@@ -1,5 +1,4 @@
-import Inferno from 'inferno';
-import Component from 'inferno-component';
+import { Component } from 'inferno';
 
 import UserModalContainer from './userEditModal';
 
@@ -19,7 +18,7 @@ class UserPreview extends Component {
       </tr>
     );
   }
-};
+}
 
 UserPreview.defaultProps = {
   identifier: '',
@@ -35,7 +34,8 @@ class UserContainer extends Component {
   render() {
     let users = this.props.users.map(function(item) {
       return (
-        <UserPreview identifier={ item._id } userName={ item.displayName }
+        <UserPreview key={ item._id } identifier={ item._id }
+                     userName={ item.displayName }
                      email={ item.email } approved={ item.approved } />
       );
     });
@@ -55,7 +55,7 @@ class UserContainer extends Component {
       </table>
     )
   }
-};
+}
 
 UserContainer.defaultProps = {
   users: []
@@ -131,6 +131,6 @@ class UserAdmin extends Component {
       </div>
     )
   }
-};
+}
 
 module.exports = UserAdmin;

@@ -42,7 +42,7 @@ class SearchBar extends Component {
           <label for="icon_prefix">How can we help you?</label>
         </div>
         <div class="col s2">
-          <button class="btn waves-effect waves-light"
+          <button class="btn waves-effect waves-light light-blue darken-2"
                   style="margin-top:20px;width:70%"
                   onClick={ linkEvent(this, this.handleSearch) }>
             <i class="material-icons">search</i>

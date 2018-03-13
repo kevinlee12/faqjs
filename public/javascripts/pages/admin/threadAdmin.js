@@ -1,5 +1,4 @@
-import Inferno from 'inferno';
-import Component from 'inferno-component';
+import { Component } from 'inferno';
 
 import ThreadModalContainer from './threadEditModal';
 
@@ -18,7 +17,7 @@ class Thread extends Component {
       </tr>
     );
   }
-};
+}
 
 Thread.defaultProps = {
   identifier: '',
@@ -33,7 +32,7 @@ class ThreadContainer extends Component {
   render() {
     let threads = this.props.threads.map(function(item) {
       return (
-        <Thread identifier={item._id} question={item.question}
+        <Thread key={ item._id } identifier={item._id} question={item.question}
                 answer={item.answer} />
       );
     });
@@ -52,7 +51,7 @@ class ThreadContainer extends Component {
       </table>
     )
   }
-};
+}
 
 ThreadContainer.defaultProps = {
   threads: []
@@ -128,6 +127,6 @@ class ThreadAdmin extends Component {
       </div>
     )
   }
-};
+}
 
 module.exports = ThreadAdmin;
