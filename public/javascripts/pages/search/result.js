@@ -1,5 +1,4 @@
-import Inferno, { linkEvent } from 'inferno';
-import Component from 'inferno-component';
+import { linkEvent, Component } from 'inferno';
 
 const PREVIEW_LENGTH = 250;
 
@@ -9,7 +8,7 @@ function shortenPreviewText(text) {
     return text;
   }
   return text.substring(0, PREVIEW_LENGTH) + '...';
-};
+}
 
 class ResultPreview extends Component {
   constructor(props) {
@@ -63,8 +62,8 @@ class Results extends Component {
   render() {
     var results = this.props.results.map(function(item, index) {
       return (
-        <ResultPreview identifier={ item._id } question={ item.question }
-                       answer={ item.answer } />
+        <ResultPreview key={ 'p' + item._id } identifier={ item._id }
+                       question={ item.question } answer={ item.answer } />
       )
     });
     return (

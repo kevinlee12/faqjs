@@ -1,5 +1,4 @@
-import Inferno from 'inferno';
-import Component from 'inferno-component';
+import { Component } from 'inferno';
 
 class ResultModal extends Component {
   constructor(props) {
@@ -35,8 +34,8 @@ class ModalContainer extends Component {
   render() {
     let resultModals = this.props.results.map(function(item, index) {
       return (
-        <ResultModal identifier={ item._id } question={ item.question }
-                     answer={ item.answer } />
+        <ResultModal key={ item._id } identifier={ item._id }
+                     question={ item.question } answer={ item.answer } />
       )
     });
     return (

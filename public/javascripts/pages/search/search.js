@@ -1,13 +1,12 @@
 import 'hammerjs';
 import 'materialize-css';
 
-import Inferno from 'inferno';
-import Component from 'inferno-component';
+import { render, Component } from 'inferno';
 
 import Navbar from './navbar.js';
 import SearchBar from './searchBar.js'
 import Results from './result.js'
-import ModalContainer from './resultModal.js'
+import ModalContainer from './modalContainer.js'
 
 const queryUrlPrefix = '/search';
 
@@ -35,6 +34,9 @@ class SearchPageApp extends Component {
   }
   componentDidUpdate() {
     $('.modal').modal({
+      ready: function(modal, trigger)  {
+        location.hash = modal.attr('id');
+      },
       complete: function() {
         location.hash = '#!';
       }
@@ -64,4 +66,4 @@ class SearchPageApp extends Component {
   }
 }
 
-Inferno.render(<SearchPageApp />, document.getElementById('app'));
+render(<SearchPageApp />, document.getElementById('app'));

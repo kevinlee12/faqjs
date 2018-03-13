@@ -1,5 +1,4 @@
-import Inferno, { linkEvent } from 'inferno';
-import Component from 'inferno-component';
+import { Component, linkEvent } from 'inferno';
 
 class SearchBar extends Component {
   constructor(props) {
@@ -22,13 +21,15 @@ class SearchBar extends Component {
       instance.props.onSearchBtnClick();
     }
   }
-  componentDidUpdate() {
-    $('input').on('keypress', function(e) {
-      var key = e.which;
-      if (key === 13) {
-        this.handleSearch(this);
-      }
-    }.bind(this));
+  /*
+    The following initiates a search whenever the user presses on the
+    Enter/Return key.
+  */
+  handleKeyboardInitiatedSearch(instance, event) {
+    var key = event.which;
+    if (key === 13) {
+      instance.handleSearch(instance);
+    }
   }
   render() {
     return (
@@ -36,7 +37,8 @@ class SearchBar extends Component {
         <div class="input-field col s10">
           <input id="icon_prefix" type="text"
                  class="validate" value={ this.state.q }
-                 onInput={ linkEvent(this, this.handleChange) } />
+                 onInput={ linkEvent(this, this.handleChange) }
+                 onKeyDown={ linkEvent(this, this.handleKeyboardInitiatedSearch )} />
           <label for="icon_prefix">How can we help you?</label>
         </div>
         <div class="col s2">
