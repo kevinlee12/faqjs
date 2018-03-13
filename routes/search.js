@@ -1,5 +1,5 @@
 let express = require('express');
-let router = express.Router();
+let router = express.Router(); // eslint-disable-line new-cap
 
 let esBuilder = require('elastic-builder');
 
@@ -12,26 +12,27 @@ const sendAllDocuments = function(db, req, res) {
   collection.find({}).toArray(function(err, docs) {
     if (err) throw err;
     console.log('Found the following records');
-    console.log(docs)
+    console.log(docs);
     res.send(docs);
   });
 };
 
 // The following is adapted from
 // https://github.com/mongodb/node-mongodb-native/#find-all-documents
-const findAndSendDocumentsDB = function(db, req, res, query) {
-  // Get the documents collection
-  const collection = db.collection('threads');
-  // Find some documents
-  collection.find({ $text: { $search: query }}).toArray(
-    function(err, docs) {
-      if (err) throw err;
-      console.log('Found the following records');
-      console.log(docs)
-      res.send(docs);
-    }
-  );
-};
+// TODO: Reactivate
+// const findAndSendDocumentsDB = function(db, req, res, query) {
+//   // Get the documents collection
+//   const collection = db.collection('threads');
+//   // Find some documents
+//   collection.find({ $text: { $search: query }}).toArray(
+//     function(err, docs) {
+//       if (err) throw err;
+//       console.log('Found the following records');
+//       console.log(docs)
+//       res.send(docs);
+//     }
+//   );
+// };
 
 const findAndSendDocumentsElastic = function(req, res, query, next) {
   const esClient = req.app.locals.esClient;
@@ -45,16 +46,15 @@ const findAndSendDocumentsElastic = function(req, res, query, next) {
 
   esClient.search({
     index: 'faq',
-    body: requestBody.toJSON()
+    body: requestBody.toJSON(),
   }, function(err, result) {
     if (err) throw err;
 
     if (next) next(result);
-  })
+  });
 };
 
 router.get('/', function(req, res, next) {
-  let results = [];
   const db = req.app.locals.db;
 
   let sendResults = function(results) {
@@ -63,12 +63,12 @@ router.get('/', function(req, res, next) {
       return {
         _id: result._id,
         question: result._source.question,
-        answer: result._source.answer
+        answer: result._source.answer,
       };
     });
 
     return res.send(sendResults);
-  }
+  };
 
   if (req.query.q) {
     findAndSendDocumentsElastic(req, res, req.query.q, sendResults);
@@ -77,7 +77,5 @@ router.get('/', function(req, res, next) {
     sendAllDocuments(db, req, res);
   }
 });
-
-
 
 module.exports = router;

@@ -1,7 +1,7 @@
 let express = require('express');
-let router = express.Router();
+let router = express.Router(); // eslint-disable-line new-cap
 
-let ObjectId = require('mongodb').ObjectID;
+let objectId = require('mongodb').ObjectID;
 
 let checkPermissions = function(req, res, successCallback, errorCallback) {
   const db = req.app.locals.db;
@@ -10,7 +10,7 @@ let checkPermissions = function(req, res, successCallback, errorCallback) {
     return res.redirect('/auth/google');
   }
   db.collection('users').findOne(
-    { googleId: req.user.googleId },
+    {googleId: req.user.googleId},
     function(err, user) {
       if (err) errorCallback(err);
 
@@ -30,42 +30,43 @@ let checkPermissions = function(req, res, successCallback, errorCallback) {
 router.get('/manage/threads', function(req, res, next) {
   let successCallback = function() {
     return res.render('admin');
-  }
+  };
 
   let errorCallback = function() {
     return res.sendStatus(403);
-  }
+  };
   checkPermissions(req, res, successCallback, errorCallback);
 });
 
 router.get('/manage/users', function(req, res, next) {
   let successCallback = function() {
     return res.render('admin');
-  }
+  };
 
   let errorCallback = function() {
     return res.sendStatus(403);
-  }
+  };
   checkPermissions(req, res, successCallback, errorCallback);
 });
 
 router.get('/manage/elastic', function(req, res, next) {
   let successCallback = function() {
     return res.render('admin');
-  }
+  };
 
   let errorCallback = function() {
     return res.sendStatus(403);
-  }
+  };
   checkPermissions(req, res, successCallback, errorCallback);
 });
 
-let checkSecureProtocol = function(req, res, next) {
-  if (!req.secure) {
-    return res.sendStatus(403);
-  }
-  next();
-};
+// TODO: Reactivate
+// let checkSecureProtocol = function(req, res, next) {
+//   if (!req.secure) {
+//     return res.sendStatus(403);
+//   }
+//   next();
+// };
 
 const createOrUpdateThreadElastic = function(req, res, obj, next) {
   const esClient = req.app.locals.esClient;
@@ -76,8 +77,8 @@ const createOrUpdateThreadElastic = function(req, res, obj, next) {
     id: obj._id,
     body: {
       question: obj.question,
-      answer: obj.answer
-    }
+      answer: obj.answer,
+    },
   }, function(err, response) {
     if (err) throw err;
 
@@ -85,7 +86,7 @@ const createOrUpdateThreadElastic = function(req, res, obj, next) {
       next(obj);
     }
   });
-}
+};
 
 const deleteThreadElastic = function(req, res, obj, next) {
   const esClient = req.app.locals.esClient;
@@ -101,7 +102,7 @@ const deleteThreadElastic = function(req, res, obj, next) {
       next(obj);
     }
   });
-}
+};
 
 // Thread Management
 // Update a thread
@@ -115,11 +116,11 @@ router.post('/thread/update', function(req, res, next) {
   const threadCollection = db.collection('threads');
 
   threadCollection.updateOne(
-    { _id: ObjectId(req.body._id) },
-    { $set: {
+    {_id: objectId(req.body._id)},
+    {$set: {
       question: req.body.question,
-      answer: req.body.answer
-     }
+      answer: req.body.answer,
+      },
     }, function(err, result) {
       if (err) throw err;
 
@@ -141,7 +142,7 @@ router.post('/thread/create', function(req, res, next) {
   threadCollection.insertOne(
     {
       question: req.body.question,
-      answer: req.body.answer
+      answer: req.body.answer,
     }, function(err, result) {
       if (err) throw err;
 
@@ -158,15 +159,15 @@ router.post('/thread/delete', function(req, res, next) {
   const threadCollection = db.collection('threads');
 
   threadCollection.deleteOne(
-    { _id: ObjectId(req.body._id) },
+    {_id: objectId(req.body._id)},
     function(err, result) {
       if (err) throw err;
 
       deleteThreadElastic(req, res, req.body);
-      res.send({ status: result.result.n });
+      res.send({status: result.result.n});
     }
   );
-})
+});
 
 // User management
 
@@ -192,12 +193,12 @@ router.post('/user/update', function(req, res, next) {
   const userCollection = db.collection('users');
 
   userCollection.updateOne(
-    { _id: ObjectId(req.body._id) },
-    { $set: {
+    {_id: objectId(req.body._id)},
+    {$set: {
       displayName: req.body.displayName,
       email: req.body.email,
-      approved: req.body.approved
-     }
+      approved: req.body.approved,
+      },
     }, function(err, result) {
       if (err) throw err;
       res.send(req.body);
@@ -218,7 +219,7 @@ router.post('/user/create', function(req, res, next) {
     {
       displayName: req.body.displayName,
       email: req.body.email,
-      approved: req.body.approved
+      approved: req.body.approved,
     }, function(err, result) {
       if (err) throw err;
 
@@ -234,14 +235,14 @@ router.post('/user/delete', function(req, res, next) {
   const userCollection = db.collection('users');
 
   userCollection.deleteOne(
-    { _id: ObjectId(req.body._id) },
+    {_id: objectId(req.body._id)},
     function(err, result) {
       if (err) throw err;
 
-      res.send({ status: result.result.n });
+      res.send({status: result.result.n});
     }
   );
-})
+});
 
 // Elastic Management
 router.get('/elastic/create_index', function(req, res, next) {
