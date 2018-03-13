@@ -1,4 +1,8 @@
 {
     "presets": [ "es2015" ],
-    "plugins": ["inferno"]
+    "plugins": [
+        ["babel-plugin-inferno",
+         "babel-plugin-syntax-jsx",
+         {"imports": true}]
+    ]
 }
