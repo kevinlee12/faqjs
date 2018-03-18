@@ -9,6 +9,7 @@ let checkPermissions = function(req, res, successCallback, errorCallback) {
   if (req.user === null || req.user === undefined) {
     return res.redirect('/auth/google');
   }
+
   db.collection('users').findOne(
     {googleId: req.user.googleId},
     function(err, user) {
@@ -50,6 +51,28 @@ router.get('/manage/users', function(req, res, next) {
 });
 
 router.get('/manage/elastic', function(req, res, next) {
+  let successCallback = function() {
+    return res.render('admin');
+  };
+
+  let errorCallback = function() {
+    return res.sendStatus(403);
+  };
+  checkPermissions(req, res, successCallback, errorCallback);
+});
+
+router.get('/manage/site', function(req, res, next) {
+  let successCallback = function() {
+    return res.render('admin');
+  };
+
+  let errorCallback = function() {
+    return res.sendStatus(403);
+  };
+  checkPermissions(req, res, successCallback, errorCallback);
+});
+
+router.get('/manage/db', function(req, res, next) {
   let successCallback = function() {
     return res.render('admin');
   };
@@ -242,6 +265,41 @@ router.post('/user/delete', function(req, res, next) {
       res.send({status: result.result.n});
     }
   );
+});
+
+// DB Management
+router.post('/db/create', function(req, res, next) {
+  const db = req.app.locals.db;
+
+  const createCollection = function(collectionName) {
+    db.createCollection(collectionName, function(err, res) {
+      if (err) throw err;
+      console.log('Collection created for ' + collectionName);
+    });
+  };
+
+  if (req.body.collectionName == 'threads') {
+    createCollection('threads');
+  } else if (req.body.collectionName == 'siteConfig') {
+    createCollection('siteConfig');
+  }
+});
+
+router.post('/db/drop', function(req, res, next) {
+  const db = req.app.locals.db;
+
+  const dropCollection = function(collectionName) {
+    db.collection(collectionName).drop(function(err, delOK) {
+      if (err) throw err;
+      if (delOK) console.log('Collection ' + collectionName + ' deleted');
+    });
+  };
+
+  if (req.body.collectionName == 'threads') {
+    dropCollection('threads');
+  } else if (req.body.collectionName == 'siteConfig') {
+    dropCollection('siteConfig');
+  }
 });
 
 // Elastic Management
