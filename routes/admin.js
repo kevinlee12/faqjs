@@ -247,7 +247,8 @@ router.post('/user/create', function(req, res, next) {
       if (err) throw err;
 
       res.send(result.ops);
-    });
+    }
+  );
 });
 
 // Delete a thread
@@ -267,6 +268,12 @@ router.post('/user/delete', function(req, res, next) {
   );
 });
 
+const siteConfigTemplate = {
+  siteName: 'FAQ',
+  motherSite: 'localhost:3000',
+};
+
+
 // DB Management
 router.post('/db/create', function(req, res, next) {
   const db = req.app.locals.db;
@@ -282,6 +289,16 @@ router.post('/db/create', function(req, res, next) {
     createCollection('threads');
   } else if (req.body.collectionName == 'siteConfig') {
     createCollection('siteConfig');
+
+    insertionTemplate = siteConfigTemplate;
+    insertionTemplate['_id'] = 'siteSettings';
+    db.collection('siteConfig').insertOne(
+      insertionTemplate,
+      function(err, result) {
+        if (err) throw err;
+        res.send(result.ops);
+      }
+    );
   }
 });
 
@@ -300,6 +317,54 @@ router.post('/db/drop', function(req, res, next) {
   } else if (req.body.collectionName == 'siteConfig') {
     dropCollection('siteConfig');
   }
+});
+
+// Site Management
+router.get('/site/view', function(req, res, next) {
+  const db = req.app.locals.db;
+  const siteConfigCollection = db.collection('siteConfig');
+
+  processedSiteConfig = {};
+  for (let key in siteConfigTemplate) {
+    if (processedSiteConfig.hasOwnProperty(key)) {
+      processedSiteConfig[key] = true;
+    }
+  }
+
+  siteConfigCollection.findOne(
+    {_id: 'siteSettings'},
+    processedSiteConfig,
+    function(err, result) {
+      if (err) throw err;
+
+      console.log(result);
+      res.send(result);
+    }
+  );
+});
+
+router.post('/site/edit', function(req, res, next) {
+  let siteConfig = req.body.siteConfig;
+  let processedSiteConfig = {};
+
+  // The following is to ensure that the supplied input only has
+  // whitelisted keys.
+  for (let key in siteConfigTemplate) {
+    if (siteConfig.hasOwnProperty(key)) {
+      processedSiteConfig[key] = siteConfig[key];
+    }
+  }
+
+  const db = req.app.locals.db;
+  const siteConfigCollection = db.collection('siteConfig');
+  siteConfigCollection.updateOne(
+    {_id: 'siteSettings'},
+    {$set: processedSiteConfig},
+    function(err, result) {
+      if (err) throw err;
+      res.send(result.ops);
+    }
+  );
 });
 
 // Elastic Management
