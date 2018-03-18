@@ -2,7 +2,7 @@ import { Component } from 'inferno';
 
 const createIndexUrlPrefix = '/admin/elastic/create_index';
 
-class ThreadAdmin extends Component {
+class ElasticAdmin extends Component {
   constructor(props) {
     super(props);
   }
@@ -21,4 +21,4 @@ class ThreadAdmin extends Component {
   }
 }
 
-module.exports = ThreadAdmin;
+module.exports = ElasticAdmin;

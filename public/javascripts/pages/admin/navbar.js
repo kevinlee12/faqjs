@@ -3,6 +3,8 @@ import { Component } from 'inferno';
 const links = [
   { url: '/admin/manage/threads', name: 'Thread'},
   { url: '/admin/manage/users', name: 'Users' },
+  { url: '/admin/manage/site', name: 'Site Config' },
+  { url: '/admin/manage/db', name: 'Database' },
   { url: '/admin/manage/elastic', name: 'Elastic Search' }
 ]
 
