@@ -1,5 +1,5 @@
 node_modules/
 .cache/
-public/javascripts/dist/*
+public/javascripts/dist/
 .env
 .vscode/
