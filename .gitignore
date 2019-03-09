@@ -1,4 +1,5 @@
 node_modules/
 .cache/
-public/javascripts/dist/src.js
+public/javascripts/dist/*
 .env
+.vscode/
