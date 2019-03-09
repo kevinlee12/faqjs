@@ -24,7 +24,6 @@ parcel watch public/javascripts/<file_name>.js
 - Install NodeJS
 - Run `yarn install` or `npm install` at root and `public/javascripts/`
 
-
 ## Developer notes
 
 Please do not commit your `.env` file!
